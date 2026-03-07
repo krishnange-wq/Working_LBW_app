@@ -10,6 +10,7 @@ import tracker
 import smoother
 import physics
 import decision
+f_verdict=""
 def run_mobile_backend(video,corners):
     print("🚀 Booting Modular DRS System...")
 
@@ -47,34 +48,40 @@ def run_mobile_backend(video,corners):
     print(BOUNCE_OUTCHANCE, IMPACT_OUTCHANCE, WICKETS_OUTCHANCE)
     print(STUMP_BASE)
 
-    # --- 1. Define the Verdicts based on your Physics logic ---
-    # (Assuming BO_CONF, IM_CONF, and WI_CONF are 0-100)
+    # Clean strings to be safe
+    B_V = str(BOUNCE_VERDICT).upper()
+    I_V = str(IMPACT_VERDICT).upper()
+    W_V = str(WICKETS_VERDICT).upper()
 
-    # Helper to check if a stage is in the "Clipping" zone
-    def check_umpires_call(verdict, conf):
-        if 40 <= conf <= 60:
-            return "UMPIRE'S CALL"
-        return verdict
+    # DEBUG: If this prints, we know the code is running
+    print("Checking Verdict Logic...")
+    f_verdict = "OUT"
+    if int(WICKETS_OUTCHANCE)<40:
+        f_verdict = "NOT OUT (Missing Stumps)"
+        print("5")
+    elif int(BOUNCE_OUTCHANCE)<40:
+        f_verdict = "NOT OUT (Pitched Outside Leg)"
+        print("1")
+    elif int(IMPACT_OUTCHANCE)<40:
+        f_verdict = "NOT OUT (Impact Outside Off)"
+        print("3")
+    elif 40<int(WICKETS_OUTCHANCE)<60:
+        f_verdict = "UMPIRE'S CALL (Wickets)"
+        print("6")
+    elif 40<int(WICKETS_OUTCHANCE)<60:
+        f_verdict = "UMPIRE'S CALL (Impact)"
+        print("4")
+    elif 40<int(BOUNCE_OUTCHANCE)<60:
+        # Per your instruction: Pitching UC only on leg side
+        f_verdict = "UMPIRE'S CALL (Pitching)"
+        print("2")
 
-    # Update your stage verdicts for the final display
 
-
-    # --- 2. Final Verdict Elimination Logic ---
-    if BOUNCE_VERDICT == "OUTSIDE LEG":
-        final_verdict = "NOT OUT (Pitched Outside Leg)"
-    elif IMPACT_VERDICT == "OUTSIDE OFF":
-        final_verdict = "NOT OUT (Impact Outside Off)"
-    elif WICKETS_VERDICT == "MISSING":
-        final_verdict = "NOT OUT (Missing Stumps)"
-    # If it passed those, but ANY stage is an Umpire's Call, the whole decision is UC
-    elif "UMPIRE'S CALL" in [BOUNCE_VERDICT, IMPACT_VERDICT, WICKETS_VERDICT]:
-        final_verdict = "UMPIRE'S CALL"
-    else:
-        final_verdict = "OUT"
+    print(f"VERDICT: {f_verdict}")
 
     # --- 3. The Gigantic Dictionary ---
     result_data = {
-        "final_verdict": final_verdict,
+        "final_DRS_verdict": f_verdict,
 
         "metadata": {
             "status": "success",
@@ -109,6 +116,7 @@ def run_mobile_backend(video,corners):
             }
         }
     }
+    final_verdict = f_verdict
     for key, value in result_data.items():
         print(f"Key: {key} | Type: {type(value)}")
     print(result_data)

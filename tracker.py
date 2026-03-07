@@ -15,7 +15,9 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
     PITCH_X, PITCH_Y = BOUNCE_X,BOUNCE_Y
 
     STUMP_X_DIST=LEG_STUMP_X-OFF_STUMP_X
+    STUMP_X_DIST = STUMP_X_DIST
     STUMP_Y_DIST=STUMP_BASE-STUMP_HEIGHT
+    STUMP_Y_DIST= STUMP_Y_DIST
 
     # AUDIO SYNC SETTINGS
     # -2 corrects for the speed of sound delay (Sound arrives ~2 frames after impact)
@@ -36,6 +38,8 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
     SEARCH_DOWN = int(5/105 *STUMP_Y_DIST)
     MAX_RIGHT, MIN_RIGHT = int(13/29*STUMP_X_DIST),int(2/29*STUMP_X_DIST)
     MIN_LEFT, MAX_LEFT   = int(2/29*STUMP_X_DIST), int(13/29*STUMP_X_DIST)
+
+
 
     IMPACT_FRAME=0
     # --- 2. AUDIO LOCK FUNCTION ---
@@ -152,10 +156,10 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                     # Calculate the raw value
                     if BOUNCE_X < OFF_STUMP_X+(STUMP_X_DIST/2.5):
                         raw_k = (7 / 29) * STUMP_X_DIST
-                        p_two = 10
+                        p_two = (10/29)*STUMP_X_DIST
                     else:
                         raw_k = (5 / 29) * STUMP_X_DIST
-                        p_two  = 9
+                        p_two  = (9/29)*STUMP_X_DIST
 
 
                     # Round it to the nearest ODD integer

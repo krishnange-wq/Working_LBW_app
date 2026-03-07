@@ -5,12 +5,12 @@ url = "http://127.0.0.1:8000/analyze"
 
 # Only the corners are needed in the text payload now
 payload = {
-    'corners_json': json.dumps([[906, 1577], [1267, 1572], [2112, 2374], [85, 2406]])
+    'corners_json': json.dumps([[974, 1663], [1168, 1662], [2148, 2981], [131, 2377]])
 }
 
 # Open your test video (make sure this file exists in your folder!)
 try:
-    with open('IMG_6192.mov', 'rb') as f:
+    with open('IMG_6963.MOV', 'rb') as f:
         files = {'video': f}
 
         print("Sending request to API...")
