@@ -29,8 +29,10 @@ def run_mobile_backend(video,corners):
     ret, frame_img = cap.read()
     cap.release()
     OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT, STUMP_BASE = stump_finder.find_stumps_overlay(frame_img, corners)
-    pitch_width = corners[1]-corners[0]
-    LEG_STUMP_X = OFF_STUMP_X + 0.075*pitch_width
+    pitch_width = corners[1,0]-corners[0,0]
+    print(pitch_width)
+    stump_x_dist = 0.075 * pitch_width
+    LEG_STUMP_X = int(OFF_STUMP_X + stump_x_dist+((27-stump_x_dist)/2.8))
     print(str(OFF_STUMP_X),str(LEG_STUMP_X))
     # Stage 2: Pitch_finder uses the stumps to find the pitch of the ball
     BOUNCE_X, BOUNCE_Y, BOUNCE_FRAME = pitch_finder.find_pitch(video,corners, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE)
