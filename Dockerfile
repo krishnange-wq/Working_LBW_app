@@ -1,24 +1,25 @@
-# 1. Use Python 3.9 as the base
+# Use 3.10-slim (NOT 3.1)
 FROM python:3.10-slim
 
-# 2. Install system libraries needed for OpenCV on Linux
+# Install system tools for video processing
 RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
+    ffmpeg \
     libsm6 \
     libxext6 \
-    libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Set the working directory
 WORKDIR /app
 
-# 4. Copy and install requirements
+# Install Python libraries
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy the rest of your code (main.py, flask_api.py, etc.)
+# Copy your code
 COPY . .
 
-# 6. Run the app using Gunicorn (Production server)
-# This is much more stable than app.run()
+# Tell Render to use port 10000
+ENV PORT=10000
+EXPOSE 10000
+
+# Start the server
 CMD ["gunicorn", "--bind", "0.0.0.0:10000", "flask_api:app"]
