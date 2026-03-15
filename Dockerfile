@@ -21,4 +21,4 @@ COPY . .
 
 # 6. Run the app using Gunicorn (Production server)
 # This is much more stable than app.run()
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "flask_api:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "flask_api:app"]
