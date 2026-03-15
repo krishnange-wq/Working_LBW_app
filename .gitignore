@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# PyCharm / IDE
+.idea/
+.vscode/
+
+# Project Specific (Crucial for Cloud)
+videos/
+temp_videos/
+*.mov
+*.mp4
+
+# OS generated files
+.DS_Store
+Thumbs.db
