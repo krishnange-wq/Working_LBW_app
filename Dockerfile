@@ -1,5 +1,5 @@
 # 1. Use Python 3.9 as the base
-FROM python:3.1-slim
+FROM python:3.10-slim
 
 # 2. Install system libraries needed for OpenCV on Linux
 RUN apt-get update && apt-get install -y \
