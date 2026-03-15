@@ -1,5 +1,5 @@
 # Use 3.10-slim (NOT 3.1)
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 # Install system tools for video processing
 RUN apt-get update && apt-get install -y \
