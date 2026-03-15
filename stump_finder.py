@@ -79,7 +79,7 @@ def find_stumps_overlay(frame_img, pitch_corners, hand="RH"):
     # Blue Cross (Bottom Leg)
     #cv2.drawMarker(preview, pt_bot_leg, (255, 0, 0), cv2.MARKER_TILTED_CROSS, 25, 2)
 
-
+    print(stump_l, stump_r, stump_t, stump_b)
     return stump_l, stump_r, stump_t, stump_b
 
 # 3. RUN ON THE REAL FRAME
