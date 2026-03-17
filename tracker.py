@@ -4,7 +4,7 @@ from re import I
 import cv2
 import numpy as np
 import os
-from moviepy import VideoFileClip
+from moviepy.video.io.VideoFileClip import VideoFileClip
 from scipy.io import wavfile
 
 
