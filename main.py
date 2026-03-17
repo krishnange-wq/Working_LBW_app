@@ -34,8 +34,8 @@ def run_mobile_backend(video, corners, is_lhb=False):
         OFF_STUMP_X = OFF_STUMP_X - STUMP_WIDTH_OFFSET
 
     pitch_width = corners[1, 0] - corners[0, 0]
-    stump_x_dist = 0.0751 * pitch_width
-    LEG_STUMP_X = int(OFF_STUMP_X + stump_x_dist + ((27 - stump_x_dist) / 2.81))
+    stump_x_dist = 0.075 * pitch_width
+    LEG_STUMP_X = int(OFF_STUMP_X + stump_x_dist + ((27 - stump_x_dist) / 2.8))
 
     print(f"📊 CORRECTED COORDS: Off={OFF_STUMP_X}, Leg={LEG_STUMP_X}")
 
