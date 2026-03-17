@@ -64,22 +64,10 @@ def analyze_delivery():
         print(f"❌ Server Error: {e}")
         return jsonify({"error": str(e)}), 500
 
-
 if __name__ == '__main__':
-    # 1. Look for the port assigned by the cloud; default to 5000 for local testing
-    port = int(os.environ.get("PORT", 5000))
-
     print("-" * 50)
-    print(f"📡 LBW SERVER INITIALIZING")
+    print(f"📡 LBW SERVER ACTIVE")
     print(f"📂 Saving temp files to: {VIDEO_DIR}")
-
-    # 2. Determine if we are running locally or in the cloud for the print statement
-    if os.environ.get("PORT"):
-        print(f"🚀 CLOUD DEPLOYMENT ACTIVE ON PORT: {port}")
-    else:
-        print(f"🏠 LOCAL SERVER: http://0.0.0.0:{port}/analyze")
-
+    print(f"🚀 URL: http://0.0.0.0:5000/analyze")
     print("-" * 50)
-
-    # 3. Use the dynamic port
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=5000)
