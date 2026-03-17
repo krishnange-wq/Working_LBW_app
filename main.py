@@ -10,6 +10,8 @@ import tracker
 import smoother
 import physics
 import decision
+import os
+import shutil
 
 app = Flask(__name__)
 FRAME_WIDTH = 3840
@@ -81,25 +83,45 @@ def run_mobile_backend(video, corners, is_lhb=False):
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    # 1. Save Video
+    # --- 1. NUCLEAR PRE-FLIGHT SANITATION ---
+    # Wipe /tmp clean to ensure 1077 vs 1096 "ghosting" isn't happening
+    print("--- STARTING PRE-FLIGHT SANITATION ---", flush=True)
+    tmp_path = "/tmp"
+    for filename in os.listdir(tmp_path):
+        file_path = os.path.join(tmp_path, filename)
+        try:
+            print(f"CLEANING STALE FILE: {filename}", flush=True)
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"Could not delete {file_path}: {e}", flush=True)
+    print("--- MEMORY CLEARED: PROCEEDING ---", flush=True)
+
+    # --- 2. RECEIVE VIDEO FILE ---
     if 'video' not in request.files:
-        return jsonify({"error": "No video file"}), 40
+        return jsonify({"error": "No video file"}), 400
 
     video_file = request.files['video']
-    video_path = "temp_video.mov"
+    # Save to /tmp for Cloud Run persistence
+    video_path = os.path.join(tmp_path, "temp_video.mov")
     video_file.save(video_path)
 
-    # 2. Extract Data safely
-    raw_data = request.args.get('data')
+    # --- 3. EXTRACT DATA SAFELY ---
+    # Swift sends this in the multipart 'data' field
+    raw_data = request.form.get('data')
     if not raw_data:
-        print("❌ Error: No JSON data found in 'data' field")
+        print("❌ Error: No JSON metadata found in 'data' field")
         return jsonify({"error": "Missing metadata"}), 401
 
     try:
         data = json.loads(raw_data)
-        is_lhb_val = data.get('isLHB', False)
 
-        # Match your Swift payload key exactly
+        # Log parsed coordinates for Cloud Debugging
+        print(f"CLOUD_DEBUG: Sanitized Coords: {data.get('coordinates')}", flush=True)
+
+        is_lhb_val = data.get('isLHB', False)
         coords_list = data.get('coordinates', [])
 
         if len(coords_list) != 4:
@@ -108,9 +130,12 @@ def analyze():
 
         corners = np.array([[p['x'], p['y']] for p in coords_list], dtype=np.float32)
 
-        # 3. Run Backend
-        return jsonify(run_mobile_backend(video_path, corners, is_lhb_val))
+        # --- 4. RUN BACKEND ---
+        # Ensure your backend also outputs to /tmp if it generates a JSON file
+        result = run_mobile_backend(video_path, corners, is_lhb_val)
+
+        return jsonify(result)
 
     except Exception as e:
-        print(f"❌ JSON Parse Error: {e}")
+        print(f"❌ JSON Parse/Logic Error: {e}")
         return jsonify({"error": str(e)}), 403
