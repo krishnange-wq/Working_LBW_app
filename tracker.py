@@ -139,6 +139,8 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                 # Calculate Absolute Frame Number
                 current_abs_frame = START_FRAME + frame_count
                 frame_count += 1
+                if frame_count % 10 == 0:
+                    print(f"DEBUG: Processing frame {frame_count} at 4K...", flush=True)
                 display_frame = frame.copy()
 
                 # --- THE MAGIC LOCK ---
