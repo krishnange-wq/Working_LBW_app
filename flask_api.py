@@ -70,4 +70,4 @@ if __name__ == '__main__':
     print(f"📂 Saving temp files to: {VIDEO_DIR}")
     print(f"🚀 URL: http://0.0.0.0:5000/analyze")
     print("-" * 50)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
