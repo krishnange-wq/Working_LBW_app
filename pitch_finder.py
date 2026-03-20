@@ -71,8 +71,8 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
 
             # A. PRE-PROCESS
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            l_white = np.array([0, 0, 125])
-            u_white = np.array([180, 40, 255])
+            l_white = np.array([0, 0, 110])
+            u_white = np.array([180, 50, 255])
             mask_white = cv2.inRange(hsv, l_white, u_white)
             motion_mask = fgbg.apply(frame)
             combined = cv2.bitwise_and(motion_mask, mask_white)
