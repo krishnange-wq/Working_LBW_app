@@ -71,10 +71,8 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
 
             # A. PRE-PROCESS
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            # The "Safe High-Precision" Range
-            # V=165 is the magic number: high enough to ignore dirt, low enough to catch a 4K ball
-            l_white = np.array([0, 0, 165])
-            u_white = np.array([180, 25, 255])  # Tight S (25) is more important than V for ignoring the pitch
+            l_white = np.array([0, 0, 135])
+            u_white = np.array([180, 45, 255])
             mask_white = cv2.inRange(hsv, l_white, u_white)
             motion_mask = fgbg.apply(frame)
             combined = cv2.bitwise_and(motion_mask, mask_white)
