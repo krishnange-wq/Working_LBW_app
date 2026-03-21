@@ -128,7 +128,11 @@ def analyze():
             print(f"❌ Error: Expected 4 points, got {len(coords_list)}")
             return jsonify({"error": "Need 4 points"}), 402
 
-        corners = np.array([[p['x'], p['y']] for p in coords_list], dtype=np.float32)
+        raw_corners = np.array([[p['x'], p['y']] for p in coords_list], dtype=np.float32)
+
+        # Snap to the nearest 5px increment
+        # Example: 102.4 -> 100.0, 103.6 -> 105.0
+        corners = np.round(raw_corners / 5) * 5
 
         # --- 4. RUN BACKEND ---
         # Ensure your backend also outputs to /tmp if it generates a JSON file
