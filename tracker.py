@@ -237,10 +237,7 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                     # --- INSERT MMC HERE ---
                     # Now that the frame is saved to the video and the math is done,
                     # we can safely wipe the heavy 25MB arrays from the 8GB RAM.
-                del frame
-                del display_frame
-                import gc
-                gc.collect()
+
                 # -----------------------
 
         except Exception as e:
