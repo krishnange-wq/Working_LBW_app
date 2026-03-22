@@ -157,8 +157,8 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                     y1, y2 = max(0, int(last_y) - (SEARCH_UP)), min(height, int(last_y) + SEARCH_DOWN)
                     # Calculate the raw value
                     if BOUNCE_X < OFF_STUMP_X:
-                        raw_k = (7 / 29) * STUMP_X_DIST
-                        p_two = (10.3/29)*STUMP_X_DIST
+                        raw_k = (8 / 29) * STUMP_X_DIST
+                        p_two = (10/29)*STUMP_X_DIST
                     else:
                         raw_k = (5 / 29) * STUMP_X_DIST
                         print("raw k"+str(raw_k))
