@@ -156,13 +156,13 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                     x1, x2 = max(0, int(last_x) - SL), min(width, int(last_x) + SR)
                     y1, y2 = max(0, int(last_y) - (SEARCH_UP)), min(height, int(last_y) + SEARCH_DOWN)
                     # Calculate the raw value
-                    if BOUNCE_X < OFF_STUMP_X+(STUMP_X_DIST/100000):
+                    if BOUNCE_X < OFF_STUMP_X:
                         raw_k = (7 / 29) * STUMP_X_DIST
-                        p_two = (11/29)*STUMP_X_DIST
+                        p_two = (9/29)*STUMP_X_DIST
                     else:
                         raw_k = (5 / 29) * STUMP_X_DIST
                         print("raw k"+str(raw_k))
-                        p_two  = (8.1/29)*STUMP_X_DIST
+                        p_two  = (8/29)*STUMP_X_DIST
 
 
                     # Round it to the nearest ODD integer
