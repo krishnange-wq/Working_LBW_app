@@ -64,10 +64,11 @@ def analyze_delivery():
         print(f"❌ Server Error: {e}")
         return jsonify({"error": str(e)}), 500
 
-if __name__ == '__main__':
-    print("-" * 50)
-    print(f"📡 LBW SERVER ACTIVE")
-    print(f"📂 Saving temp files to: {VIDEO_DIR}")
-    print(f"🚀 URL: http://0.0.0.0:5000/analyze")
-    print("-" * 50)
-    app.run(host='0.0.0.0', port=5001)
+import os
+
+# ... rest of your code ...
+
+if __name__ == "__main__":
+    # Get the port from the environment, default to 5001 for local testing
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host='0.0.0.0', port=port)
