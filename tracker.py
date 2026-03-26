@@ -56,11 +56,12 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
             command = [
                 'ffmpeg',
                 '-i', video_path,
-                '-vn',  # Disable video
-                '-acodec', 'pcm_s16le',  # Standard 16-bit PCM WAV
-                '-ar', '44100',  # Sample rate
-                '-ac', '1',  # Mono (makes the mean calculation easier later)
-                '-loglevel', 'quiet',  # Keep logs clean
+                '-threads', '1',  # <--- Limit CPU to prevent OOM/Hangs
+                '-vn',
+                '-acodec', 'pcm_s16le',
+                '-ar', '44100',
+                '-ac', '1',
+                '-loglevel', 'error',  # <--- Changed from quiet to error to catch SOMETHING
                 temp_wav
             ]
 
