@@ -37,7 +37,7 @@ def run_mobile_backend(video, corners, is_lhb=False):
 
     pitch_width = corners[1, 0] - corners[0, 0]
     stump_x_dist = 0.075 * pitch_width
-    LEG_STUMP_X = np.round(OFF_STUMP_X + stump_x_dist + ((27 - stump_x_dist) / 3.2))
+    LEG_STUMP_X = np.round(OFF_STUMP_X + stump_x_dist + ((27 - stump_x_dist) / 2.8))
     print(f"📊 CORRECTED COORDS: Off={OFF_STUMP_X}, Leg={LEG_STUMP_X}")
 
     # Stage 2-5: Core Processing

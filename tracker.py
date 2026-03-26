@@ -43,43 +43,61 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
 
     IMPACT_FRAME=0
     # --- 2. AUDIO LOCK FUNCTION ---
+    import subprocess
+    import os
+    import cv2
+    import numpy as np
+    from scipy.io import wavfile
+
     def get_audio_lock_frame(video_path):
         print("🎧 Scanning Audio for Impact...")
+        temp_wav = "temp_audio.wav"
         try:
             # Get FPS
             cap = cv2.VideoCapture(video_path)
             fps = cap.get(cv2.CAP_PROP_FPS)
             cap.release()
 
-            # Extract Audio
-            clip = VideoFileClip(video_path)
-            clip.audio.write_audiofile("temp_audio.wav")
+            # 1. Extract Audio using FFmpeg Subprocess (Replaces MoviePy)
+            if os.path.exists(temp_wav):
+                os.remove(temp_wav)
 
-            # Analyze
-            # 1. Load the audio
-            # Note: scipy returns the sample rate (sr) first, then the audio data (y)
-            sr, y = wavfile.read("temp_audio.wav")
+            command = [
+                'ffmpeg',
+                '-i', video_path,
+                '-vn',  # Disable video
+                '-acodec', 'pcm_s16le',  # Standard 16-bit PCM WAV
+                '-ar', '44100',  # Sample rate
+                '-ac', '1',  # Mono (makes the mean calculation easier later)
+                '-loglevel', 'quiet',  # Keep logs clean
+                temp_wav
+            ]
 
-            # Handle stereo audio (if the .mov file has left/right channels, we combine them)
+            # This executes the extraction and waits for completion
+            subprocess.run(command, check=True)
+
+            # 2. Analyze (EXACTLY the same logic as before)
+            sr, y = wavfile.read(temp_wav)
+
+            # Handle stereo audio (safety check, though FFmpeg -ac 1 should handle it)
             y = y.astype(np.float32)
             if len(y.shape) > 1:
                 y = np.mean(y, axis=1)
 
-            # 2. Normalize volume (Exactly like your Colab code)
-            y_norm = y / np.max(np.abs(y))
+            # Normalize volume
+            y_norm = y / (np.max(np.abs(y)) + 1e-9)  # Added epsilon to prevent div by zero
 
-            # 3. Calculate RMS Volume Spikes (The Numpy Way)
+            # Calculate RMS Volume Spikes (The Numpy Way)
             frame_length = 1024
             hop_length = 256
 
-            # We slide a window over the audio and calculate the volume for each chunk
             num_frames = 1 + (len(y_norm) - frame_length) // hop_length
             rms = np.array([
                 np.sqrt(np.mean(y_norm[i * hop_length: i * hop_length + frame_length] ** 2))
                 for i in range(num_frames)
             ])
 
-            # 4. Convert frames to time (Exactly like your Colab code)
+            # Convert frames to time
             times = np.arange(len(rms)) * hop_length / sr
 
             # Scan Backwards to find the "Snick"
@@ -89,13 +107,18 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                     abs_frame = int(peak_time * fps)
                     lock_frame = abs_frame + AUDIO_OFFSET_FRAMES
                     print(f"🔒 AUDIO LOCK FOUND: Frame {lock_frame} (Time: {peak_time:.2f}s)")
+
+                    # Cleanup temp file
+                    if os.path.exists(temp_wav): os.remove(temp_wav)
                     return lock_frame
-                    IMPACT_FRAME = lock_frame
 
             print("⚠️ No loud sound found. Tracking will run to end.")
+            if os.path.exists(temp_wav): os.remove(temp_wav)
             return 99999
+
         except Exception as e:
             print(f"❌ Audio Error: {e}")
+            if os.path.exists(temp_wav): os.remove(temp_wav)
             return 99999
 
     # --- 3. INITIALIZATION ---
