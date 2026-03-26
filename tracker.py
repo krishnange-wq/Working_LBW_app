@@ -1,13 +1,4 @@
 
-
-from re import I
-import cv2
-import numpy as np
-import os
-from moviepy.video.io.VideoFileClip import VideoFileClip
-from scipy.io import wavfile
-
-
 def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNCE_X,BOUNCE_Y,BOUNCE_FRAME):
     # --- 1. SETTINGS ---
     VIDEO_PATH = video_path
