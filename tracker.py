@@ -163,7 +163,7 @@ def track_ball(video_path, OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,STUMP_BASE,BOUNC
                         raw_k = (5 / 29) * STUMP_X_DIST
                         print("raw k"+str(raw_k))
                         p_two  = (8.1/29)*STUMP_X_DIST
-                        p_two  = (8.1/29)*STUMP_X_DIST
+                        p_two  = (9.1/29)*STUMP_X_DIST
 
 
                     # Round it to the nearest ODD integer
