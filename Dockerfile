@@ -24,4 +24,4 @@ COPY . .
 
 # Cloud Run sets the PORT environment variable.
 # We use Gunicorn to handle production-grade Flask serving.
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 flask_api:app
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 600 flask_api:app
