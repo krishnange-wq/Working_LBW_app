@@ -7,6 +7,7 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
     BOX_CENTER_Y = 0.02
     BOX_WIDTH = 0.43
     BOX_HEIGHT = 0.06
+
     # --- 2. CONFIGURATION ---
     VIDEO_PATH = VIDEO_PATH
     PITCH_CORNERS = PITCH_CORNERS
@@ -23,8 +24,9 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
     STUMP_X_DIST=LEG_STUMP_X-OFF_STUMP_X
     STUMP_Y_DIST=STUMP_BASE-STUMP_HEIGHT
     # Ball Filters
-    MIN_BALL_AREA = 10/(38*103)*(STUMP_X_DIST*STUMP_Y_DIST)
-    MAX_BALL_AREA = 600/(38*103)*(STUMP_X_DIST*STUMP_Y_DIST)
+    MIN_BALL_AREA = 0/(38*103)*(STUMP_X_DIST*STUMP_Y_DIST)
+    MAX_BALL_AREA = 42.5/(38*103)*(STUMP_X_DIST*STUMP_Y_DIST)
+    print(MAX_BALL_AREA)
 
     # --- 3. CALCULATE THE BOX PIXEL COORDINATES ---
     # Origin = Top Left
@@ -94,9 +96,10 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
                 x, y, w, h = cv2.boundingRect(c)
                 aspect = float(w) / h
 
-                if MIN_BALL_AREA < area < MAX_BALL_AREA and 0.5 < aspect < 1.6:
+                if 0 < area < MAX_BALL_AREA or 0.87 < aspect < 1.13:
                     center_y = y + h
                     center_x = int(x + w/2)
+                    print(x,y)
 
                     # Track Lowest Point (Bounce)
                     if center_y > record_y:
@@ -104,6 +107,8 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
                         best_pitch_coords = (center_x, center_y)
                         best_frame_data = frame.copy()
                         BOUNCE_FRAME = frame_count-1
+                        AREA = area
+                        ASPECT = aspect
 
 
         cap.release()
@@ -132,6 +137,8 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
             print(f"\n✅ FOUND PITCH POINT: {best_pitch_coords}")
             print(f"   COPY THIS: PITCH_POINT = {best_pitch_coords}")
             print("bounce frame: "+str(BOUNCE_FRAME))
+            print(AREA)
+            print(ASPECT)
             BOUNCE_X,BOUNCE_Y = best_pitch_coords
             return BOUNCE_X, BOUNCE_Y, BOUNCE_FRAME
         else:

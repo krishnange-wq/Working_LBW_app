@@ -44,7 +44,7 @@ def run_mobile_backend(video, corners, is_lhb=False):
     # Stage 2-5: Core Processing
     BOUNCE_X, BOUNCE_Y, BOUNCE_FRAME = pitch_finder.find_pitch(video, corners, OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT, STUMP_BASE)
     path_data = tracker.track_ball(video, OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT, STUMP_BASE, BOUNCE_X, BOUNCE_Y, BOUNCE_FRAME)
-    smoothed_list = smoother.apply_dual_threshold_smoothing(path_data, same_dir_limit=10, opposing_limit=0)
+    smoothed_list = smoother.apply_dual_threshold_smoothing(path_data, same_dir_limit=2, opposing_limit=0)
     IMPACT_X, IMPACT_Y = smoothed_list[-1]
     WICKET_X, WICKET_Y, future_points = physics.ballPhysics(video, smoothed_list, OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT, STUMP_BASE)
 

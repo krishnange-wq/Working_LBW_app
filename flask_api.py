@@ -70,5 +70,5 @@ import os
 
 if __name__ == "__main__":
     # Get the port from the environment, default to 5001 for local testing
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 5003))
     app.run(host='0.0.0.0', port=port)
