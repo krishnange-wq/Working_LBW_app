@@ -26,7 +26,7 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
     # Ball Filters
     MIN_BALL_AREA = 0/(38*103)*(STUMP_X_DIST*STUMP_Y_DIST)
     MAX_BALL_AREA = 42.5/(38*103)*(STUMP_X_DIST*STUMP_Y_DIST)
-    print(MAX_BALL_AREA)
+
 
     # --- 3. CALCULATE THE BOX PIXEL COORDINATES ---
     # Origin = Top Left
@@ -99,7 +99,6 @@ def find_pitch(VIDEO_PATH, PITCH_CORNERS,OFF_STUMP_X,LEG_STUMP_X,STUMP_HEIGHT,ST
                 if 0 < area < MAX_BALL_AREA or 0.87 < aspect < 1.13:
                     center_y = y + h
                     center_x = int(x + w/2)
-                    print(x,y)
 
                     # Track Lowest Point (Bounce)
                     if center_y > record_y:

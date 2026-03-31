@@ -1,10 +1,14 @@
 import cv2
 import numpy as np
 
+import safety_net
+from safety_net import calculate_linear_safety_anchors
 def ballPhysics(VIDEO_PATH,smoothed_list,OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT, STUMP_BASE):
     # ==========================================
     # 🏏 PURE PHYSICS PREDICTOR: NO MULTIPLIERS
     # ==========================================
+
+
 
     # 1. RELOAD
     filename = VIDEO_PATH
@@ -103,6 +107,10 @@ def ballPhysics(VIDEO_PATH,smoothed_list,OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT,
 
                 impact_pt = future_points[-1]
                 WICKET_X,WICKET_Y=impact_pt
+                ##### New physics
+                if WICKET_Y > smoothed_list[0][1]:
+                    new_smoothed_list = safety_net.calculate_linear_safety_anchors(smoothed_list)
+                    ballPhysics(ballPhysics(VIDEO_PATH,new_smoothed_list,OFF_STUMP_X, LEG_STUMP_X, STUMP_HEIGHT, STUMP_BASE))
                 print(impact_pt)
                 print(LEG_STUMP_X)
                 pink_col = (180, 105, 255)
